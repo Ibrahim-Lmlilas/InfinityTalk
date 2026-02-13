@@ -1,0 +1,146 @@
+@startuml InfinityTalk Use Case Diagram
+
+left to right direction
+
+' Actors
+actor User
+actor Manager
+actor Administrator
+
+' System Boundary with Use Cases
+rectangle "InfinityTalk System" {
+  ' Authentication
+  usecase "Register" as UC1
+  usecase "Login" as UC2
+  usecase "Logout" as UC3
+  usecase "Reset Password" as UC4
+  
+  ' Messaging
+  usecase "Send Private Message" as UC5
+  usecase "Send Group Message" as UC6
+  usecase "Create Channel" as UC7
+  usecase "Join Channel" as UC8
+  usecase "Mention User" as UC9
+  usecase "React to Message" as UC10
+  usecase "Chat with AI" as UC11
+  
+  ' Calls & Meetings
+  usecase "Start Audio Call" as UC12
+  usecase "Start Video Call" as UC13
+  usecase "Share Screen" as UC14
+  usecase "Schedule Meeting" as UC15
+  
+  ' File Management
+  usecase "Upload File" as UC16
+  usecase "Download File" as UC17
+  usecase "Share File" as UC18
+  
+  ' Project Management
+  usecase "Create Project" as UC20
+  usecase "Create Task" as UC21
+  usecase "Assign Task" as UC22
+  usecase "View Kanban Board" as UC23
+  
+  ' Administration
+  usecase "Manage Users" as UC24
+  usecase "Manage Roles" as UC25
+  usecase "Configure Permissions" as UC26
+}
+
+' User Relations
+User --> UC1
+User --> UC2
+User --> UC3
+User --> UC4
+User --> UC5
+User --> UC6
+User --> UC7
+User --> UC8
+User --> UC9
+User --> UC10
+User --> UC11
+User --> UC12
+User --> UC13
+User --> UC14
+User --> UC15
+User --> UC16
+User --> UC17
+User --> UC18
+User --> UC20
+User --> UC21
+User --> UC22
+User --> UC23
+
+' Manager Relations
+Manager --> UC20
+Manager --> UC21
+Manager --> UC22
+Manager --> UC23
+Manager --> UC24
+Manager --> UC25
+
+' Administrator Relations
+Administrator --> UC24
+Administrator --> UC25
+Administrator --> UC26
+
+' Inheritance: Manager extends User, Administrator extends Manager
+User <|-- Manager
+Manager <|-- Administrator
+
+' ============================================
+' INCLUDE RELATIONS (Required - Always happens)
+' ============================================
+' All actions require authentication
+UC5 ..> UC2 : <<include>>
+UC6 ..> UC2 : <<include>>
+UC7 ..> UC2 : <<include>>
+UC8 ..> UC2 : <<include>>
+UC9 ..> UC2 : <<include>>
+UC10 ..> UC2 : <<include>>
+UC11 ..> UC2 : <<include>>
+UC12 ..> UC2 : <<include>>
+UC13 ..> UC2 : <<include>>
+UC14 ..> UC2 : <<include>>
+UC15 ..> UC2 : <<include>>
+UC16 ..> UC2 : <<include>>
+UC17 ..> UC2 : <<include>>
+UC18 ..> UC2 : <<include>>
+UC20 ..> UC2 : <<include>>
+UC21 ..> UC2 : <<include>>
+UC22 ..> UC2 : <<include>>
+UC23 ..> UC2 : <<include>>
+UC24 ..> UC2 : <<include>>
+UC25 ..> UC2 : <<include>>
+UC26 ..> UC2 : <<include>>
+
+' To mention a user, you must send a message first
+UC9 ..> UC5 : <<include>>
+UC9 ..> UC6 : <<include>>
+
+' To react to a message, you must see/send a message first
+UC10 ..> UC5 : <<include>>
+UC10 ..> UC6 : <<include>>
+
+' To create a channel, you must join it first (or be auto-added)
+UC7 ..> UC8 : <<include>>
+
+' To assign a task, you must create it first
+UC22 ..> UC21 : <<include>>
+
+' To view Kanban board, you must have a project first
+UC23 ..> UC20 : <<include>>
+
+' ============================================
+' EXTEND RELATIONS (Optional - May happen)
+' ============================================
+' Reset Password extends Login (when user forgets password)
+UC4 ..> UC2 : <<extend>>
+
+' Share Screen extends Video Call (optional feature during call)
+UC14 ..> UC13 : <<extend>>
+
+' Schedule Meeting extends Video Call (optional way to start)
+UC15 ..> UC13 : <<extend>>
+
+@enduml
